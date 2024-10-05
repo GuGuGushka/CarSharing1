@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище carsharingModel" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CARSDATA">
+    <Key>
+      <PropertyRef Name="car_id" />
+    </Key>
+    <Property Name="car_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="car_model" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="fuel_supply" Type="smallint" Nullable="false" />
+    <Property Name="locence_plate" Type="char" MaxLength="9" Nullable="false" />
+    <Property Name="location" Type="int" Nullable="false" />
+    <Property Name="mileage" Type="int" Nullable="false" />
+    <Property Name="date_of_the_last_technical_inspection" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="status_id" Type="int" />
+  </EntityType>
+  <EntityType Name="CarStatuses">
+    <Key>
+      <PropertyRef Name="status_id" />
+    </Key>
+    <Property Name="status_id" Type="int" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="roleID" />
+    </Key>
+    <Property Name="roleID" Type="int" Nullable="false" />
+    <Property Name="role_name" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="USERDATA">
+    <Key>
+      <PropertyRef Name="USER_ID" />
+    </Key>
+    <Property Name="USER_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FULL_NAME" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="CARD_NUMBER" Type="varchar" MaxLength="19" Nullable="false" />
+    <Property Name="POINTS" Type="smallint" Nullable="false" />
+    <Property Name="MILEAGE" Type="numeric" Precision="15" Scale="1" Nullable="false" />
+    <Property Name="PHONE_NUMBER" Type="varchar" MaxLength="16" Nullable="false" />
+    <Property Name="EMAIL" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="PASSWORD" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="roleid" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_CARSDATA_CarStatuses">
+    <End Role="CarStatuses" Type="Self.CarStatuses" Multiplicity="0..1" />
+    <End Role="CARSDATA" Type="Self.CARSDATA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CarStatuses">
+        <PropertyRef Name="status_id" />
+      </Principal>
+      <Dependent Role="CARSDATA">
+        <PropertyRef Name="status_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_USERDATA_Roles">
+    <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+    <End Role="USERDATA" Type="Self.USERDATA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="roleID" />
+      </Principal>
+      <Dependent Role="USERDATA">
+        <PropertyRef Name="roleid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище carsharingModelContainer">
+    <EntitySet Name="CARSDATA" EntityType="Self.CARSDATA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CarStatuses" EntityType="Self.CarStatuses" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="USERDATA" EntityType="Self.USERDATA" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_CARSDATA_CarStatuses" Association="Self.FK_CARSDATA_CarStatuses">
+      <End Role="CarStatuses" EntitySet="CarStatuses" />
+      <End Role="CARSDATA" EntitySet="CARSDATA" />
+    </AssociationSet>
+    <AssociationSet Name="FK_USERDATA_Roles" Association="Self.FK_USERDATA_Roles">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="USERDATA" EntitySet="USERDATA" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

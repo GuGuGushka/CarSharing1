@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="carsharingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="CARSDATA">
+    <Key>
+      <PropertyRef Name="car_id" />
+    </Key>
+    <Property Name="car_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="car_model" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="fuel_supply" Type="Int16" Nullable="false" />
+    <Property Name="locence_plate" Type="String" MaxLength="9" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="location" Type="Int32" Nullable="false" />
+    <Property Name="mileage" Type="Int32" Nullable="false" />
+    <Property Name="date_of_the_last_technical_inspection" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="status_id" Type="Int32" />
+    <NavigationProperty Name="CarStatuses" Relationship="Self.FK_CARSDATA_CarStatuses" FromRole="CARSDATA" ToRole="CarStatuses" />
+  </EntityType>
+  <EntityType Name="CarStatuses">
+    <Key>
+      <PropertyRef Name="status_id" />
+    </Key>
+    <Property Name="status_id" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="CARSDATA" Relationship="Self.FK_CARSDATA_CarStatuses" FromRole="CarStatuses" ToRole="CARSDATA" />
+  </EntityType>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="roleID" />
+    </Key>
+    <Property Name="roleID" Type="Int32" Nullable="false" />
+    <Property Name="role_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="USERDATA" Relationship="Self.FK_USERDATA_Roles" FromRole="Roles" ToRole="USERDATA" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="USERDATA">
+    <Key>
+      <PropertyRef Name="USER_ID" />
+    </Key>
+    <Property Name="USER_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FULL_NAME" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CARD_NUMBER" Type="String" MaxLength="19" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="POINTS" Type="Int16" Nullable="false" />
+    <Property Name="MILEAGE" Type="Decimal" Precision="15" Scale="1" Nullable="false" />
+    <Property Name="PHONE_NUMBER" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="EMAIL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PASSWORD" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="roleid" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Roles" Relationship="Self.FK_USERDATA_Roles" FromRole="USERDATA" ToRole="Roles" />
+  </EntityType>
+  <Association Name="FK_CARSDATA_CarStatuses">
+    <End Role="CarStatuses" Type="Self.CarStatuses" Multiplicity="0..1" />
+    <End Role="CARSDATA" Type="Self.CARSDATA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CarStatuses">
+        <PropertyRef Name="status_id" />
+      </Principal>
+      <Dependent Role="CARSDATA">
+        <PropertyRef Name="status_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_USERDATA_Roles">
+    <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+    <End Role="USERDATA" Type="Self.USERDATA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="roleID" />
+      </Principal>
+      <Dependent Role="USERDATA">
+        <PropertyRef Name="roleid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="carsharingEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="CARSDATA" EntityType="Self.CARSDATA" />
+    <EntitySet Name="CarStatuses" EntityType="Self.CarStatuses" />
+    <EntitySet Name="Roles" EntityType="Self.Roles" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="USERDATA" EntityType="Self.USERDATA" />
+    <AssociationSet Name="FK_CARSDATA_CarStatuses" Association="Self.FK_CARSDATA_CarStatuses">
+      <End Role="CarStatuses" EntitySet="CarStatuses" />
+      <End Role="CARSDATA" EntitySet="CARSDATA" />
+    </AssociationSet>
+    <AssociationSet Name="FK_USERDATA_Roles" Association="Self.FK_USERDATA_Roles">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="USERDATA" EntitySet="USERDATA" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
